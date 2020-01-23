@@ -20,7 +20,7 @@
    > python train.py
 ```
 
-### evaluator
+### Evaluator
 ``` 
    > python evaluator.py
 ```
