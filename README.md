@@ -3,11 +3,11 @@
 ``` 
    1. download mvb dataset from http://volumenet.cn/#/
    2.> mkdir MVB
-     > mv MVB_train/Image MVB/MVB_train/Image
+     > mv MVB_train/Image       MVB/MVB_train/Image
      > mv MVB_val/Image/gallery MVB/MVB_val/Image/gallery
-     > mv MVB_val/Image/probe MVB/MVB_val/Image/probe
+     > mv MVB_val/Image/probe   MVB/MVB_val/Image/probe
     3. Install dependencies
-       pytorch>=0.4
+       pytorch>=1.0
        torchvision
        yacs
        tensorboardX
@@ -26,9 +26,9 @@
 ```
 ### Result
 
-|  mAP  | Rank-1 | Rank-5 | Rank-10|
-| ------| :----: | :----: | :----: |
-| 82.3% | 80.4%  | 90.50% | 95.0%  |
+|  mAP  | Rank-1 | Rank-5| Rank-10|
+| ------| :----: | :----:| :----: |
+| 82.3% | 80.4%  | 90.5% | 95.0%  |
 
 
 ### Citation
