@@ -203,7 +203,7 @@ class BagReID_RESNET(nn.Module):
 
 class BagReID_IBN(nn.Module):
 
-    def __init__(self, num_classes_cls=0, num_classes_mate=0, width_ratio=0.5, height_ratio=0.5):
+    def __init__(self, num_classes_cls=0, num_classes_mate=0, width_ratio=0.7, height_ratio=0.7):
         super(BagReID_IBN, self).__init__()
 
         self.backbone = resnet50_ibn_a(last_stride=1, pretrained=True)
@@ -277,11 +277,11 @@ class BagReID_IBN(nn.Module):
         z2_p3 = self.part_maxpool(x[:, :, 2:3, :]).view(x.size(0), -1)
         
         # 输出 (batch, 2048)
-        f0_p3 = self.part_reduction(z0_p3)
+        #f0_p3 = self.part_reduction(z0_p3)
         # 输出 (batch, 2048)
         f1_p3 = self.part_reduction(z1_p3)
         # 输出 (batch, 2048)
-        f2_p3 = self.part_reduction(z2_p3)
+        #f2_p3 = self.part_reduction(z2_p3)
   
         # part2 branch
         # 输出 (batch, 2048, h, w)
@@ -296,9 +296,9 @@ class BagReID_IBN(nn.Module):
        
         if self.training:
             # ID损失, 输出 (batch, num_classes_cls)
-            global_softmax_class_cls = self.global_softmax_cls(self.global_bn(glob_softmax))
+            global_softmax_class_cls = self.global_softmax_cls(self.global_bn(global_triplet_feature))
             # mate损失, 输出 (batch, num_classes_mate)
-            global_softmax_class_mate = self.global_softmax_mate(self.global_bn(glob_softmax))
+            global_softmax_class_mate = self.global_softmax_mate(self.global_bn(global_triplet_feature))
             softmax_features_cls.append(global_softmax_class_cls)
             softmax_features_mate.append(global_softmax_class_mate)
             
@@ -306,29 +306,29 @@ class BagReID_IBN(nn.Module):
             softmax_feature0_cls = self.part_softmax_cls(self.part_bn(part2_triplet_feature))
 
             softmax_feature_cls = self.part_softmax_cls(self.part_bn(part1_triplet_feature))
-            softmax_feature1_cls = self.part_softmax_cls(self.part_bn(f0_p3))
+            #softmax_feature1_cls = self.part_softmax_cls(self.part_bn(f0_p3))
             softmax_feature2_cls = self.part_softmax_cls(self.part_bn(f1_p3))
-            softmax_feature3_cls = self.part_softmax_cls(self.part_bn(f2_p3))
+            #softmax_feature3_cls = self.part_softmax_cls(self.part_bn(f2_p3))
 
             softmax_features_cls.append(softmax_feature0_cls)
             softmax_features_cls.append(softmax_feature_cls)  
-            softmax_features_cls.append(softmax_feature1_cls)
+            #softmax_features_cls.append(softmax_feature1_cls)
             softmax_features_cls.append(softmax_feature2_cls)
-            softmax_features_cls.append(softmax_feature3_cls)
+            #softmax_features_cls.append(softmax_feature3_cls)
             
             # mate损失
             softmax_feature0_mate = self.part_softmax_mate(self.part_bn(part2_triplet_feature))
 
             softmax_feature_mate = self.part_softmax_mate(self.part_bn(part1_triplet_feature))
-            softmax_feature1_mate = self.part_softmax_mate(self.part_bn(f0_p3))
+            #softmax_feature1_mate = self.part_softmax_mate(self.part_bn(f0_p3))
             softmax_feature2_mate = self.part_softmax_mate(self.part_bn(f1_p3))
-            softmax_feature3_mate = self.part_softmax_mate(self.part_bn(f2_p3))
+            #softmax_feature3_mate = self.part_softmax_mate(self.part_bn(f2_p3))
 
             softmax_features_mate.append(softmax_feature0_mate)
             softmax_features_mate.append(softmax_feature_mate)  
-            softmax_features_mate.append(softmax_feature1_mate)
+            #softmax_features_mate.append(softmax_feature1_mate)
             softmax_features_mate.append(softmax_feature2_mate)
-            softmax_features_mate.append(softmax_feature3_mate)
+            #softmax_features_mate.append(softmax_feature3_mate)
             
             return triplet_features, softmax_features_cls, softmax_features_mate
         else:
